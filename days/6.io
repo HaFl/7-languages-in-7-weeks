@@ -1,22 +1,32 @@
 #! usr/local/bin/io
 
-/* Good to know
+/* GOOD TO KNOW
+
 - the special thing about operators (which are syntactic sugar for functions or
     in the case of Io messages) is that you don't need to write 5 /(4) but
     instead can write 5 / 4
+
 - spacing is weird in Io as you basically could write everything on one line
     (due to everything being a message). However, the use of ";" is possible
+
 - method overloading might be a problem in Io due to the syntax --> how do I
     know that writeln "slowly" is different from writeln("slowly")
+
 - documentation is really bad! While "... slotNames sort" helps to find out
     the functions, there seems to be no way of telling what input they expect
     or to get a simple description of them. Also, where are special functions
     like curlyBrackets, foreach, call message arguments etc. documented?
     Maybe I just didn't find the best documentation on the Internet yet...
+
+    UPDATE: ok, documenation is alright (iolanguage.org + use "code" to
+        see method implementation (which sometimes works)) but still could be
+        a lot better (Python is amazing in that aspect!)
+
 - debugging is a pain: whenever one copies from the editor to the REPL, the
     indentation is screwed up and has to be straigthened out with ";"s.
     Additionally, for my last task, the script behaved different in the REPL
     than when called from file!
+
 - the fact that I had to add a hack to the source code so that I would be able
     to install it on my MacBook alone tells me that the language is not used
     a lot
