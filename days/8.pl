@@ -67,10 +67,15 @@ fac(N, F, R) :- N1 is N - 1, F1 is N * F, fac(N1, F1, R).
 */
 
 % Towers of Hanoi - maybe some other time
+
 % Negation:
 %   my first guess --> "not X" means "everything except X". So you might select more
 %       options than intended.
-%   actually --> ...
+%   actually --> not(X) is the negation of X, but does not mean that X is false,
+%       it means that X can't be proven true
+%       example: man(Adam). woman(Eve). Query: not(man(Abel)) --> yes
+%       Also, negating a predicate can cause subsequent predicates to be
+%       ignored (due to 'cut' and 'fail').
 
 % DO
 /* first shot

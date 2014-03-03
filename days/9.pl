@@ -4,9 +4,13 @@
 * solving systems with constraints
 * or in other words: we have a set of constraints which are easy to express but
 *   hard to solve
+*
+* 'is' vs. '=': 'is' seems to be used for arithmetic expressions, e.g.
+*   Result is Expr succeeds if Result can be unified(!) with eval(Expr)
+*
+* obviously Prolog is dynamically typed
 */
 
-/*
 % Sudoku
 valid([]).
 valid([Head|Tail]) :-
@@ -41,7 +45,6 @@ sudoku(Puzzle, Solution) :-
     valid([Row1, Row2, Row3, Row4,
            Col1, Col2, Col3, Col4,
            Square1, Square2, Square3, Square4]).
-*/
 
 % Eight Queens Problem
 /*
@@ -141,17 +144,12 @@ rev([Head|Tail], Rev) :-
 
 % DO
 % sudoku 6x6 - 9x9 is the same
-% Sudoku
-valid([]).
-valid([Head|Tail]) :-
-    fd_all_different(Head),
-    valid(Tail).
-
+pretty_print([]) :- true.
 pretty_print([Head|Tail]) :-
     write(Head), nl,
     pretty_print(Tail).
 
-sudoku(Puzzle, Solution) :-
+sudoku6(Puzzle, Solution) :-
     Solution = Puzzle,
 
     Puzzle = [S11, S12, S13, S14, S15, S16,
@@ -190,9 +188,79 @@ sudoku(Puzzle, Solution) :-
 
     pretty_print([Row1, Row2, Row3, Row4, Row5, Row6]).
 
-/* TODO
-* research meaning of "not"
-* is predicate vs unification --> fully grounded?!
-* build better sudoku (find bug in current sudoku?!)
-* check out advanced eight queens problem
+    /* test like this
+    sudoku6([1, _, _, _, _, _,
+            _, 5, _, 2, _, _,
+            _, 1, 6, _, 5, _, 
+            _, 3, _, 6, 2, _, 
+            _, _, 1, _, 3, _, 
+            _, _, _, _, _, 5],
+            Solution).
+    */
+
+% This version is not finished as getting the squares is missing (everything
+% else works!). I feel it's just not worth the time finishing it, as I already
+% developed quite a good understanding of logic/functional programming...
+sudokuN(Puzzle, Solution) :-
+    Solution = Puzzle,
+    length(Puzzle, Len),
+    Size is sqrt(Len),
+    fd_domain(Puzzle, 1, Size),
+
+    row_slices(Puzzle, Rows, Size),
+    transpose(Rows, Cols),
+
+    valid(Rows),
+    valid(Cols),
+    SquareSize is sqrt(Size),
+    valid_squares(Rows, SquareSize),
+
+    pretty_print(Rows).
+
+/*
+valid_squares(Rows, Size) :-
+    row_slice(Rows, SquareRows, Size),
+    append(SquareRows, Rows1, Rows),
+    valid_squares(Rows1, Size).
 */
+
+row_slice(_, [], 0).
+row_slice([Head|Tail], [Head|Rest], Size) :-
+    Size1 is Size - 1,
+    slice(Tail, Rest, Size1).
+
+row_slices([], [], _).
+row_slices(Puzzle, Rows, Size) :-
+    row_slice(Puzzle, Row, Size),
+    append(Row, Tail, Puzzle),
+    row_slices(Tail, Rest, Size),
+    Rows = [Row|Rest].
+
+% advanced eight queens solution
+eight_queens_adv(Queens) :-
+    length(Queens, 8),
+    valid_board_adv(Queens),
+    fd_all_different(Queens),
+
+    diags1_adv(Queens, Diags1, 1),
+    diags2_adv(Queens, Diags2, 1),
+
+    fd_all_different(Diags1),
+    fd_all_different(Diags2).
+
+valid_queen_adv(Row) :- member(Row, [1,2,3,4,5,6,7,8]).
+
+valid_board_adv([]).
+valid_board_adv([Head|Tail]) :- valid_queen_adv(Head), valid_board_adv(Tail).
+
+diags1_adv([], [], 9).
+diags1_adv([Queen|QueensTail], [Diagonal|DiagonalsTail], Index) :-
+    Index1 is Index + 1,
+    diags1_adv(QueensTail, DiagonalsTail, Index1),
+    Diagonal is Queen - Index.
+
+diags2_adv([], [], 9).
+diags2_adv([Queen|QueensTail], [Diagonal|DiagonalsTail], Index) :-
+    Index1 is Index + 1,
+    diags2_adv(QueensTail, DiagonalsTail, Index1),
+    Diagonal is Queen + Index.
