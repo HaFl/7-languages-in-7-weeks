@@ -134,48 +134,40 @@ object TicTacToeBoard {
     }
     res
   }
-  
-  def gameOver(board: Array[Array[String]]): Boolean = {
-    // columns init
-    val firstColChars = board(0)
-    var gameOverCols = Array(true, true, true)
-    
+
+  def gameOver(board: Array[Array[String]]): Boolean = {    
     // diagonals init
     val firstDiagChars = Array(board(0)(0), board(0)(2))
     var gameOverDiags = Array(true, true)
     
     for(row <- 0 until board.length) {
-      
+      // col init
+      var gameOverCol = true
+      val firstColChar = board(0)(row)
       // row init
       var gameOverRow = true
       val firstRowChar = board(row)(0)
       
       for(col <- 0 until board(row).length) {
-        if(board(row)(col) == " ") {
+        // check column
+        if(board(col)(row) == " " || board(col)(row) != firstColChar) {
+          gameOverCol = false
+        }
+        // check row
+        if(board(row)(col) == " " || board(row)(col) != firstRowChar) {
           gameOverRow = false
-          gameOverCols(col) = false
-        } else {
-          if(board(row)(col) != firstRowChar) {
-            gameOverRow = false
-          }
-          if(board(col)(row) != firstColChars(col)) {
-            gameOverCols(col) = false
-          }
         }
         // check diagonals
         if (row == col && (board(row)(col) == " " || board(row)(col) != firstDiagChars(0))) {
           gameOverDiags(0) = false
         }
-        if (row == (2 - col) && (board(row)(col) == " " || board(row)(col) != firstDiagChars(1))) {
+        if (row == (board.length - 1 - col) && (board(row)(col) == " " || board(row)(col) != firstDiagChars(1))) {
           gameOverDiags(1) = false
         }
       }
-      if(gameOverRow) {
+      if(gameOverCol || gameOverRow) {
         return true
       }
-    }
-    for(col <- gameOverCols) {
-      if(col) return true
     }
     for(diag <- gameOverDiags) {
       if(diag) return true
