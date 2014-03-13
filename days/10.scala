@@ -1,5 +1,17 @@
 #!/usr/bin/env scala
 
+/* OBSERVATIONS:
+ * There are a lot of types in Java compared to Python as it is more
+ * low level (by the way, the possibility of mixing types in collections
+ * which is default in Python is just amazing). For scala, there are the Java
+ * types PLUS the scala types (mutable, immutable, etc.). That is just very
+ * confusing! Also, as many types are implicitly inferenced it is not always
+ * obvious with which type exactly one is confronted / working with (e.g. the
+ * java type or some scala pondont).
+ *
+ * Python is way easier and more flexible (not as fast though).
+ */
+
 // from tutorial of day 1 with scala
 def whileLoop {
     var i = 1
