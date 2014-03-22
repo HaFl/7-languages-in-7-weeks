@@ -1,3 +1,2 @@
 curse	nocurse
-badcurse	nobadcurse
 ohno	ohyes

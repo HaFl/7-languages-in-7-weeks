@@ -39,18 +39,13 @@ trait Censor {
 		curseWords
 	}
 
-	def censor(words: List[String], path: Option[String] = None) = {
+	def censor(text: String, path: Option[String] = None) = {
 		val curseWords = if (path.isDefined) getCurseWords(path.get) else getCurseWords()
-		words.map( word =>
-			if(curseWords contains word) {
-				curseWords(word)
-			} else {
-				word
-			})
+        curseWords.foldLeft(text)((replacedText, badWord) => replacedText.replaceAll(badWord._1, badWord._2))
 	}
 }
 
 object Test extends Censor
 //val test = new Test with Censor
-val list2 = List("curse", "good", "badcurse")
-println(Test.censor(list2))
+val text = "Oh my god, this is a bad curse, ohno."
+println(Test.censor(text))
