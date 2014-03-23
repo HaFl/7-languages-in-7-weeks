@@ -111,6 +111,8 @@ val bobTate = new Person("Bob", "Tate")
 	* my first stab - that must be quite ugly to look at for a seasoned
 	* Scala programmer. It is very much coded in imperative style.
 	* I at least adapted the toString method to a more functional style now.
+    *
+    * for a really good version take a look at http://rosettacode.org/wiki/Tic-tac-toe#Scala
 	*/
 object TicTacToeBoard {
 
