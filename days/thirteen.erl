@@ -51,10 +51,7 @@ count_to_ten(N) -> io:write(N), io:fwrite(" "), count_to_ten(N + 1).
 % 3.
 error_or_success(success) -> io:fwrite("success~n");
 % if Message is a number then it should be "~s: ~w"
-error_or_success({error, Message}) -> io:fwrite("~s: ~s" , [error, Message]).
+error_or_success({error, Message}) -> io:fwrite("~p: ~p~n" , [error, Message]).
 
-% the existence of fwrite and write seems weird to me. It would be way nicer
-% to have one standard format function like in Python (which handles any input
-% correctly, may it be a number or a String).
-% Also, the String representation as a List of numbers is awkward. Hopefully
+% The String representation as a List of numbers is awkward. Hopefully
 % there is a good reason for this which I will encounter in the next chapters.
