@@ -1,4 +1,4 @@
--module(thirteen).
+-module(erlang_1).
 -export([mirror/1]).
 -export([number/1]).
 -export([factorial/1]).
