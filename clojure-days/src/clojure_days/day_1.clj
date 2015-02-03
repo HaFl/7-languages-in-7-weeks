@@ -1,4 +1,5 @@
-(ns clojure-days.day-1)
+(ns clojure-days.day-1
+  (:gen-class))
 
 ;;; FIND
 ;; Examples using Clojure sequences
