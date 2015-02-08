@@ -9,43 +9,24 @@
 ; Other popular macros are: ns, for, ->, assert, ...  On the other hand `if`
 ; and `do` for example are primitives. However, many constructs which would
 ; have to be built-in in other languages are actually macros in clojure.
-(defmacro when
-  "Evaluates test. If logical true, evaluates body in an implicit do."
-  {:added "1.0"}
-  [test & body]
-  (list 'if test (cons 'do body)))
+(comment    ; to prevent WARNING
+  (defmacro when
+    "Evaluates test. If logical true, evaluates body in an implicit do."
+    {:added "1.0"}
+    [test & body]
+    (list 'if test (cons 'do body))))
 
-(defmacro with-out-str
-  "Evaluates exprs in a context in which *out* is bound to a fresh
-  StringWriter.  Returns the string created by any nested printing
-  calls."
-  {:added "1.0"}
-  [& body]
-  `(let [s# (new java.io.StringWriter)]
-     (binding [*out* s#]
-       ~@body
-       (str s#))))
-
-(defmacro with-open
-  "bindings => [name init ...]
-
-  Evaluates body in a try expression with names bound to the values
-  of the inits, and a finally clause that calls (.close name) on each
-  name in reverse order."
-  {:added "1.0"}
-  [bindings & body]
-  (assert-args
-     (vector? bindings) "a vector for its binding"
-     (even? (count bindings)) "an even number of forms in binding vector")
-  (cond
-    (= (count bindings) 0) `(do ~@body)
-    (symbol? (bindings 0)) `(let ~(subvec bindings 0 2)
-                              (try
-                                (with-open ~(subvec bindings 2) ~@body)
-                                (finally
-                                  (. ~(bindings 0) close))))
-    :else (throw (IllegalArgumentException.
-                   "with-open only allows Symbols in bindings"))))
+(comment    ; to prevent WARNING
+  (defmacro with-out-str
+    "Evaluates exprs in a context in which *out* is bound to a fresh
+    StringWriter.  Returns the string created by any nested printing
+    calls."
+    {:added "1.0"}
+    [& body]
+    `(let [s# (new java.io.StringWriter)]
+       (binding [*out* s#]
+         ~@body
+         (str s#)))))
 
 
 ;; An example of defining your own lazy sequence
@@ -58,9 +39,44 @@
 ;; features were still under development as this book was being
 ;; developed)
 
-; defrecord: http://clojure.org/datatypes
-; protocols: http://clojure.org/protocols
+; records:
+; - http://clojure.org/datatypes
+; - http://www.braveclojure.com/multimethods-records-protocols/
+; Records are custom map-like data types (which implement abstractions e.g.,
+; protocols). If you find yourself creating maps with the same fields over and
+; over or if you would like to make use of protocols, then records are the way
+; to go.
+
+; protocols:
+; - http://clojure.org/protocols,
+; - http://stackoverflow.com/questions/
+;     4509782/simple-explanation-of-clojure-protocols
+; - http://www.braveclojure.com/multimethods-records-protocols/
+; It's all about extensibility. Protocols allow to define abstractions (which
+; is a named collection of operations) and to extend other abstractions (e.g.
+; Java interfaces / classes) with those protocols (see extend-type,
+; extend-protocol).
+; Protocol methods are dispatched based on the type of the first argument (vs
+; multimethods which dispatch based on multiple arguments). Turns out that the
+; reason for protocols is performance as most host systems (e.g. JVM) have
+; specialized high-performance support for dispatching only on the type of only
+; the first argument.
 
 
 
 ;;; DO
+
+;; Write a type using defrecord that implements a protocol.
+(defprotocol Employee
+  (nick [x] "The nickname of the Employee.")
+  (joke [x] "Favorite joke of the Employee."))
+
+(defrecord SoftwareEngineer [first-name last-name]
+  Employee
+  (nick [_]
+    (clojure.string/lower-case (str (first first-name) last-name)))
+  (joke [_]
+    "How many Germans does it take to screw in a light bulb?\n\\
+    One, they are efficient and not very funny."))
+
+(nick (SoftwareEngineer. "Florian" "Hartl"))
