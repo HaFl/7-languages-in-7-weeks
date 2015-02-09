@@ -66,6 +66,14 @@
 
 ;;; DO
 
+;; Implement an unless with an else condition using macros.
+(defmacro unless [condition body else-body]
+  (list 'if (list 'not condition) body else-body))
+
+(unless true (println "body") (println "else-body"))
+(unless false (println "body") (println "else-body"))
+
+
 ;; Write a type using defrecord that implements a protocol.
 (defprotocol Employee
   (nick [x] "The nickname of the Employee.")
