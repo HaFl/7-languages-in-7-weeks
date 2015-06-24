@@ -30,7 +30,7 @@ import scala.io.Source
 import scala.collection.mutable.HashMap
 
 trait Censor {
-	def getCurseWords(path: String="../srv/curseWords.txt") = {
+	def getCurseWords(path: String="../data/curseWords.txt") = {
 		val curseWords = new HashMap[String, String]
 		Source.fromFile(path).getLines().foreach{ line =>
 			val words = line.split("\t")
